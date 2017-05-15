@@ -1,6 +1,8 @@
 <h1>Now your result :</h1>
 
 
-<p><%= @score %></p>
+<p><%= @score[:score] %></p>
+<p><%= @score[:message] %></p>
+
 
 <%=link_to "retry", game_path %>

@@ -51,7 +51,7 @@ class PagesController < ApplicationController
   end
 
   def get_translation(word)
-    api_key = "YOUR_SYSTRAN_API_KEY"
+    api_key = "23782877-c1d2-4cf4-8b19-da4259a53827"
     begin
       response = open("https://api-platform.systran.net/translation/text/translate?source=en&target=fr&key=#{api_key}&input=#{word}")
       json = JSON.parse(response.read.to_s)
