@@ -1,6 +1,3 @@
-require 'open-uri'
-require 'json'
-
 class PagesController < ApplicationController
   def game
     @grid = generate_grid(10)
@@ -8,11 +5,12 @@ class PagesController < ApplicationController
   end
 
   def score
-    @word = params[:word].split("")
-    @grid = params[:grid].split("")
+    @word = params[:word]
+    @grid = params[:grid]
     @start_time = Time.parse(params[:start_time])
     @end_time = Time.now
     @score = run_game(@word, @grid, @start_time, @end_time)
+    raise
   end
 
   def generate_grid(grid_size)
@@ -20,7 +18,7 @@ class PagesController < ApplicationController
   end
 
   def included?(guess, grid)
-    guess.all? { |letter| guess.count(letter) <= grid.count(letter) }
+    guess.split("").all? { |letter| guess.count(letter) <= grid.count(letter) }
   end
 
   def compute_score(attempt, time_taken)
@@ -51,7 +49,7 @@ class PagesController < ApplicationController
   end
 
   def get_translation(word)
-    api_key = "23782877-c1d2-4cf4-8b19-da4259a53827"
+    api_key = "YOUR_SYSTRAN_API_KEY"
     begin
       response = open("https://api-platform.systran.net/translation/text/translate?source=en&target=fr&key=#{api_key}&input=#{word}")
       json = JSON.parse(response.read.to_s)
@@ -59,7 +57,7 @@ class PagesController < ApplicationController
         return json['outputs'][0]['output']
       end
     rescue
-      if File.read('/usr/share/dict/words').upcase.split("\n").include? word.join.upcase
+      if File.read('/usr/share/dict/words').upcase.split("\n").include? word.upcase
         return word
       else
         return nil
